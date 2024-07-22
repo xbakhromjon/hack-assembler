@@ -1,0 +1,35 @@
+- hack-asm -f code.asm -o code.hack
+
+# init
+- init symbol table
+- add pre-defined symbols
+
+# first-pass
+- foreach over asm lines
+    - read line
+    - if line start with `(` and end with `)`
+        - parse (XXX) into XXX
+        - add to symbol table (XXX, line+1)
+
+# second-pass
+- n = 16 (starter memory position for variables)
+- foreach over asm lines
+    - read line
+    - if start with `@`
+        - if `@symbol`
+            - if not exist in symbol table
+                - add (symbol, n)
+                - n++
+            - replace symbol with its address
+        - translate A-instruction
+    - if C-instruction
+        - parse command into parts(dest, comp, jump)
+        - translate dest, comp, jump
+        - put all together
+    - write to output file
+
+
+
+TODO:
+- basic assembler without symbols
+- with symbols
