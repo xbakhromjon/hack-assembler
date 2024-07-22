@@ -26,3 +26,5 @@ go.work
 /.idea/misc.xml
 /.idea/modules.xml
 /.idea/vcs.xml
+/files/Add.hack
+/assembler
