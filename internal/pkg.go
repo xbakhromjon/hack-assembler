@@ -76,3 +76,11 @@ func IsNumeric(val string) bool {
 	}
 	return true
 }
+
+func ParseStrToUint(str string) (uint32, error) {
+	val, err := strconv.ParseUint(str, 10, 32)
+	if err != nil {
+		return 0, err
+	}
+	return uint32(val), nil
+}

@@ -75,27 +75,25 @@ func main() {
 	for parser.Scan() {
 		binary := ""
 		if parser.A() {
+			sym, err := parser.Symbol()
+			if err != nil {
+				log.Fatalf("extract symbol from A instruction: %s", err.Error())
+			}
 			var addr uint32 = 0
-			if parser.isANumeric() {
-				log.Printf("A numeric: %s", parser.current)
-				addrVal, err := parser.Address()
+
+			if IsNumeric(sym) {
+				val, err := ParseStrToUint(sym)
 				if err != nil {
 					log.Fatalf("extract a val: %s", err.Error())
 				}
-				addr = addrVal
+				addr = val
 			} else {
-				symbol, err := parser.Symbol()
-				if err != nil {
-					log.Fatalf("extract symbol from A instruction: %s", err.Error())
-				}
-				log.Printf("A symbol: %s", parser.current)
-				addr = symTable.Get(symbol)
+				addr = symTable.Get(sym)
 			}
 			binAddr, err := ConvertTo15BitBinary(addr)
 			if err != nil {
 				log.Fatalf("convert a val to 15 bit: %s", err.Error())
 			}
-			log.Printf("A binary: %s", binAddr)
 			binary = "0" + binAddr
 		}
 

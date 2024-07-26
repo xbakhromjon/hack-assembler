@@ -14,10 +14,13 @@ func TestMainFunc(t *testing.T) {
 		asmFile string
 		cmpFile string
 	}{
+		// without any labels
 		{"add", "../test-files/Add.asm", "../test-files/Add.cmp"},
 		{"maxL", "../test-files/MaxL.asm", "../test-files/MaxL.cmp"},
 		{"rectL", "../test-files/RectL.asm", "../test-files/RectL.cmp"},
 		{"pongL", "../test-files/PongL.asm", "../test-files/PongL.cmp"},
+
+		// only goto label
 		{"max", "../test-files/Max.asm", "../test-files/Max.cmp"},
 	}
 

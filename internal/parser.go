@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -60,18 +59,6 @@ func (p *Parser) ScanErr() error {
 
 func (p *Parser) A() bool {
 	return strings.HasPrefix(p.current, "@")
-}
-
-func (p *Parser) isANumeric() bool {
-	return IsNumeric(p.current[1:])
-}
-
-func (p *Parser) Address() (uint32, error) {
-	val, err := strconv.ParseUint(p.current[1:], 10, 32)
-	if err != nil {
-		return 0, err
-	}
-	return uint32(val), nil
 }
 
 func (p *Parser) Symbol() (string, error) {
