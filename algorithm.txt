@@ -1,4 +1,4 @@
-- hack-asm -f code.asm -o code.hack
+- hack-asm -f code.asm
 
 # init
 - init symbol table
@@ -27,9 +27,3 @@
         - translate dest, comp, jump
         - put all together
     - write to output file
-
-
-
-TODO:
-- basic assembler without symbols
-- with symbols
