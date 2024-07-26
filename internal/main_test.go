@@ -22,6 +22,10 @@ func TestMainFunc(t *testing.T) {
 
 		// only goto label
 		{"max", "../test-files/Max.asm", "../test-files/Max.cmp"},
+
+		// variables label
+		{"rect", "../test-files/Rect.asm", "../test-files/Rect.cmp"},
+		{"pong", "../test-files/Pong.asm", "../test-files/Pong.cmp"},
 	}
 
 	for _, c := range cases {

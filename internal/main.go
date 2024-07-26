@@ -72,6 +72,7 @@ func main() {
 	}
 
 	// second-pass
+	var n uint32 = 16
 	for parser.Scan() {
 		binary := ""
 		if parser.A() {
@@ -88,6 +89,10 @@ func main() {
 				}
 				addr = val
 			} else {
+				if !symTable.Exists(sym) {
+					symTable.Add(sym, n)
+					n = n + 1
+				}
 				addr = symTable.Get(sym)
 			}
 			binAddr, err := ConvertTo15BitBinary(addr)

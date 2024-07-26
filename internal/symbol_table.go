@@ -40,6 +40,6 @@ func (s SymbolTable) Get(key string) uint32 {
 }
 
 func (s SymbolTable) Exists(key string) bool {
-
-	return false
+	_, ok := s[key]
+	return ok
 }
