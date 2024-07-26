@@ -69,6 +69,6 @@ func (c Code) Comp(sym string) (string, error) {
 }
 
 func (c Code) Jump(sym string) (string, error) {
-
-	return jumpTable[sym], nil
+	bin := jumpTable[sym]
+	return bin, nil
 }

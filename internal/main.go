@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"errors"
 	"log"
 	"os"
@@ -23,8 +22,7 @@ func main() {
 		}
 	}()
 
-	scanner := bufio.NewScanner(asmFile)
-	parser, err := NewParser(scanner)
+	parser, err := NewParser(asmFile)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -57,17 +55,47 @@ func main() {
 		}
 	}()
 
+	symTable := NewSymbolTable()
+
+	// first-pass
+	for parser.ScanLabel() {
+		if !parser.IsLabel() {
+			continue
+		}
+		label := parser.Label()
+		symTable.Add(label, parser.line)
+	}
+
+	err = parser.Reset()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// second-pass
 	for parser.Scan() {
 		binary := ""
 		if parser.A() {
-			addr, err := parser.Aval()
-			if err != nil {
-				log.Fatalf("extract a val: %s", err.Error())
+			var addr uint32 = 0
+			if parser.isANumeric() {
+				log.Printf("A numeric: %s", parser.current)
+				addrVal, err := parser.Address()
+				if err != nil {
+					log.Fatalf("extract a val: %s", err.Error())
+				}
+				addr = addrVal
+			} else {
+				symbol, err := parser.Symbol()
+				if err != nil {
+					log.Fatalf("extract symbol from A instruction: %s", err.Error())
+				}
+				log.Printf("A symbol: %s", parser.current)
+				addr = symTable.Get(symbol)
 			}
 			binAddr, err := ConvertTo15BitBinary(addr)
 			if err != nil {
 				log.Fatalf("convert a val to 15 bit: %s", err.Error())
 			}
+			log.Printf("A binary: %s", binAddr)
 			binary = "0" + binAddr
 		}
 
@@ -76,15 +104,12 @@ func main() {
 			comp, _ := parser.Comp()
 			jump, _ := parser.Jump()
 
-			log.Printf("dest: %s comp: %s jump: %s \n", dest, comp, jump)
-
 			destBin, _ := code.Dest(dest)
 			compBin, _ := code.Comp(comp)
 			jumpBin, _ := code.Jump(jump)
 
 			binary = "111" + compBin + destBin + jumpBin
 		}
-
 		_, err = file.Write([]byte(binary + "\r\n"))
 		if err != nil {
 			log.Fatalf("write file: %s", err.Error())

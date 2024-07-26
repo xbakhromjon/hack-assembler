@@ -26,5 +26,9 @@ go.work
 /.idea/misc.xml
 /.idea/modules.xml
 /.idea/vcs.xml
-/files/Add.hack
+/test-files/Add.hack
 /assembler
+/test-files/Max.hack
+/test-files/MaxL.hack
+/test-files/PongL.hack
+/test-files/RectL.hack

@@ -5,8 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"slices"
 	"strconv"
 )
+
+var digits = []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
 
 func GetArg(name string) string {
 	args := os.Args
@@ -46,17 +49,30 @@ func CompareFiles(binFilepath string, cmpFilepath string) error {
 	}
 	binScanner := bufio.NewScanner(binFile)
 
+	l := 0
 	for cmpScanner.Scan() {
 		if !binScanner.Scan() {
 			return errors.New("bin file is smaller")
 		}
 
 		if cmpScanner.Text() != binScanner.Text() {
-			return errors.New(fmt.Sprintf("expected: %s; actual: %s", cmpScanner.Text(), binScanner.Text()))
+			return errors.New(fmt.Sprintf("line=%d expected: %s; actual: %s", l, cmpScanner.Text(), binScanner.Text()))
 		}
+		l++
 	}
 	if binScanner.Scan() {
 		return errors.New("bin file is larger")
 	}
 	return nil
+}
+
+func IsNumeric(val string) bool {
+	runes := []rune(val)
+	for _, c := range runes {
+		contains := slices.Contains(digits, string(c))
+		if !contains {
+			return false
+		}
+	}
+	return true
 }
